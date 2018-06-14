@@ -100,7 +100,15 @@ class pivotTemplate extends BaseTemplate {
 								<?php } ?>
 						<?php echo $wgPivotFeatures['wikiName']; ?></span></a></h1>
 					</section>
-					
+
+					<?php if ($wgUser->isLoggedIn()): ?>
+					<div id="echo-notifications" class="show-for-medium-up">
+						<div id="echo-notifications-alerts"></div>
+						<div id="echo-notifications-messages"></div>
+						<div id="echo-notifications-notice"></div>
+					</div>
+					<?php endif; ?>
+
 					<section id="right-nav-aside" class="right-small">
 					<a class="right-off-canvas-toggle"><span id="menu-user"><i class="fa <?php if ($wgUser->isLoggedIn()): ?>fa-user<?php else: ?>fa-navicon<?php endif; ?> fa-lg"></i></span></a>
 					</section>
@@ -170,44 +178,33 @@ class pivotTemplate extends BaseTemplate {
 								
 								<div id="p-cactions" class="large-10 medium-9 columns">
 								
-									<div class="row">
-										<div class="large-12 columns">
-												<!-- Output page indicators -->
-												<?php echo $this->getIndicators(); ?>
-												<!-- If user is logged in output echo location -->
-												<?php if ($wgUser->isLoggedIn()): ?>
-												<div id="echo-notifications">
-												<div id="echo-notifications-alerts"></div>
-												<div id="echo-notifications-messages"></div>
-												<div id="echo-notifications-notice"></div>
-												</div>
-												<?php endif; ?>
-												<!--[if lt IE 9]>
-												<div id="siteNotice" class="sitenotice"><?php echo $this->text('sitename') . ' '. wfMessage( 'pivot-browsermsg' )->text(); ?></div>
-												<![endif]-->
-
-												<?php if ( $this->data['sitenotice'] ) { ?><div id="siteNotice" class="sitenotice"><?php $this->html( 'sitenotice' ); ?></div><?php } ?>
-												<?php if ( $this->data['newtalk'] ) { ?><div id="usermessage" class="newtalk"><?php $this->html( 'newtalk' ); ?></div><?php } ?>
-										</div>
-									</div>
-								
 									<?php if ($wgUser->isLoggedIn() || $wgPivotFeatures['showActionsForAnon']): ?>
-										<a href="#" data-options="align:left" data-dropdown="drop1" class="button secondary small radius pull-right hide-for-print" id="drop"><i class="fa fa-navicon fa-lg"><span id="page-actions" class="show-for-medium-up">&nbsp;<?php echo wfMessage( 'actions' )->text() ?></span></i></a>
+										<a id="drop" href="#" data-options="align:left" data-dropdown="drop1" class="button secondary small radius pull-right hide-for-print"><i class="fa fa-navicon fa-lg"><span id="page-actions" class="show-for-medium-up">&nbsp;<?php echo wfMessage( 'actions' )->text() ?></span></i></a>
 										<ul id="drop1" class="tiny content f-dropdown" data-dropdown-content>
 											<?php foreach($this->data['content_actions'] as $key => $tab) { echo preg_replace(array('/\sprimary="1"/', '/\scontext="[a-z]+"/', '/\srel="archives"/'),'',$this->makeListItem($key, $tab)); } ?>
 											<?php wfRunHooks( 'SkinTemplateToolboxEnd', array( &$this, true ));  ?>
 										</ul>
 
+								<!-- Output page indicators -->
+								<?php echo $this->getIndicators(); ?>
+
 									<?php endif;
+	// TODO: (2018-06-14) simplify the below
 									$namespace = str_replace('_', ' ', $this->getSkin()->getTitle()->getNsText());
 									$displaytitle = $this->data['title'];
 									if (!empty($namespace)) {
 										$pagetitle = $this->getSkin()->getTitle();
 										$newtitle = str_replace($namespace.':', '', $pagetitle);
 										$displaytitle = str_replace($pagetitle, $newtitle, $displaytitle);
-									?><h4 class="namespace label"><?php print $namespace; ?></h4><?php } ?>
+									?><!--<h4 class="namespace label"><?php print $namespace; ?></h4>--><?php
+									} ?>
 									<div id="content">
-									<h2 class="title"><?php print $displaytitle; ?></h2>
+	<h2 class="title">
+		<?php if (!empty($namespace)) {
+			?><span class="namespace"><?= $namespace ?>:</span><?php
+		} ?>
+		<?= $displaytitle ?>
+	</h2>
 									<?php if ( $this->data['isarticle'] ) { ?><h3 id="tagline"><?php $this->msg( 'tagline' ) ?></h3><?php } ?>
 									<?php if ( $this->html('subtitle') ) { ?><h5 id="sitesub" class="subtitle"><?php $this->html('subtitle') ?></h5><?php } ?>
 									<div id="contentSub" class="clear_both"></div>
