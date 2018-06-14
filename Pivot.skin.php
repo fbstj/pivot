@@ -35,9 +35,6 @@ class SkinPivot extends SkinTemplate {
 			'navbarIcon' => false,
 			'preloadFontAwesome' => false,
 			'showFooterIcons' => false,
-			'addThisPUBID' => '',
-			'useAddThisShare' => '',
-			'useAddThisFollow' => ''
 		);
 		foreach ($wgPivotFeaturesDefaults as $fgOption => $fgOptionValue) {
 			if ( !isset($wgPivotFeatures[$fgOption]) ) {
@@ -211,11 +208,6 @@ class pivotTemplate extends BaseTemplate {
 									?><h4 class="namespace label"><?php print $namespace; ?></h4><?php } ?>
 									<div id="content">
 									<h2 class="title"><?php print $displaytitle; ?></h2>
-											<?php if ($wgPivotFeatures['useAddThisShare'] !== '') { ?>
-											<!-- Go to www.addthis.com/dashboard to customize your tools -->
-											<div class="<?php echo $wgPivotFeatures['useAddThisShare']; ?> hide-for-print"></div>
-											<!-- Go to www.addthis.com/dashboard to customize your tools -->
-											<?php } ?>
 									<?php if ( $this->data['isarticle'] ) { ?><h3 id="tagline"><?php $this->msg( 'tagline' ) ?></h3><?php } ?>
 									<?php if ( $this->html('subtitle') ) { ?><h5 id="sitesub" class="subtitle"><?php $this->html('subtitle') ?></h5><?php } ?>
 									<div id="contentSub" class="clear_both"></div>
@@ -252,14 +244,6 @@ class pivotTemplate extends BaseTemplate {
 											</div>	
 											<div id="footer-right-icons" class="small-12 medium-4 large-3 columns hide-for-print">
 											<ul id="footer-right">
-												<li class="social-follow hide-for-print">
-													<?php if ($wgPivotFeatures['useAddThisFollow'] !== '') { ?>
-														<div class="social-links">
-															<!-- Go to www.addthis.com/dashboard to customize your tools -->
-															<div class="<?php echo $wgPivotFeatures['useAddThisFollow']; ?> hide-for-print"></div>
-														</div>
-													<?php } ?>
-												</li>
 												<?php foreach ($this->getFooterIcons($poweredbyType) as $blockName => $footerIcons) { ?>
 													<li class="<?php echo $blockName ?>"><?php foreach ($footerIcons as $icon) { ?>
 														<?php echo $this->getSkin()->makeFooterIcon($icon, $poweredbyMakeType); ?>
@@ -285,10 +269,6 @@ class pivotTemplate extends BaseTemplate {
 		
 		
 		<?php $this->printTrail(); ?>
-
-			<?php if ($this->data['isarticle'] && $wgPivotFeatures['addThisPUBID'] !== '') { ?>
-				<script type="text/javascript" src="//s7.addthis.com/js/300/addthis_widget.js#pubid=<?php echo $wgPivotFeatures['addThisPUBID']; ?>" async="async"></script>
-			<?php } ?>	
 		</body>
 		</html>
 
