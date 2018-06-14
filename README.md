@@ -45,9 +45,6 @@ Use following features in `LocalSettings.php` to change the behavior.
 - `'navbarIcon' => false` no icon in mobile view, `true` to use the global set logopath image of the wiki.
 - `'preloadFontAwesome' => false` set to true to preload Font Awesome as a `<head>` element. Useful to overcome MIME type server configurations not set correctly.
 - `'showFooterIcons' => false` will show text in place of footer icons, `true` will output the icons as globally set.
-- `'addThisPUBID' => ''` empty string will not fire the AddThis script, `'ra-##-#######'` publisher ID will allow the run the AddThis script in async on content pages only.
-- `'useAddThisShare' => ''` default empty string, do not use AddThis share, `your_addthis_specific_div_class_string` will insert the share toolbox div directly under page title, but before the tagline with your custom div class.
-- `'useAddThisFollow' => ''` default empty string, do not use AddThis follow, `your_addthis_specific_div_class_string` will insert the follow toolbox div in the `right-footer` area before icon or text output with your custom div class.
 
 These are the default values and the example of the array to change the defaults. Add the following after `wfLoadSkin( 'pivot' );` in `LocalSettings.php` to change the feature defaults:
 
@@ -62,9 +59,6 @@ These are the default values and the example of the array to change the defaults
 		'navbarIcon' => false,
 		'preloadFontAwesome' => false,
 		'showFooterIcons' => true,
-		'addThisPUBID' => '',
-		'useAddThisShare' => '',
-		'useAddThisFollow' => ''
 	);
 
 
