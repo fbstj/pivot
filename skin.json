@@ -1,12 +1,13 @@
 {
-	"name": "Pivot",
+	"name": "Pivot (coppermind)",
 	"version": "2.0.0",
 	"author": [
 		"Tom Hutchison",
-		"..."
+		"Joe ST",
+		"Eric Lake"
 	],
 	"license-name": "BSD-2-Clause",
-	"url": "http://github.com/hutchy68/pivot",
+	"url": "http://github.com/fbstj/pivot",
 	"descriptionmsg": "pivot-desc",
 	"type": "skin",
 	"ValidSkinNames": {
