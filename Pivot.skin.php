@@ -70,16 +70,6 @@ class pivotTemplate extends BaseTemplate {
 				$body = '';
 				break;
 		}
-		switch ($wgPivotFeatures['showFooterIcons']) {
-			case true:
-				$poweredbyType = "icononly";
-				$poweredbyMakeType = 'withImage';
-				break;
-			default:
-				$poweredbyType = "nocopyright";
-				$poweredbyMakeType = 'withoutImage';
-				break;	
-		}
 
 ?>
 <!-- START PIVOTTEMPLATE -->
@@ -101,13 +91,7 @@ class pivotTemplate extends BaseTemplate {
 						<?php echo $wgPivotFeatures['wikiName']; ?></span></a></h1>
 					</section>
 
-					<?php if ($wgUser->isLoggedIn()): ?>
-					<div id="echo-notifications" class="show-for-medium-up">
-						<div id="echo-notifications-alerts"></div>
-						<div id="echo-notifications-messages"></div>
-						<div id="echo-notifications-notice"></div>
-					</div>
-					<?php endif; ?>
+<?php $this->render_echo($wgUser); ?>
 
 					<section id="right-nav-aside" class="right-small">
 					<a class="right-off-canvas-toggle"><span id="menu-user"><i class="fa <?php if ($wgUser->isLoggedIn()): ?>fa-user<?php else: ?>fa-navicon<?php endif; ?> fa-lg"></i></span></a>
@@ -185,26 +169,15 @@ class pivotTemplate extends BaseTemplate {
 											<?php wfRunHooks( 'SkinTemplateToolboxEnd', array( &$this, true ));  ?>
 										</ul>
 
-								<!-- Output page indicators -->
-								<?php echo $this->getIndicators(); ?>
+									<?php endif; ?>
 
-									<?php endif;
-	// TODO: (2018-06-14) simplify the below
-									$namespace = str_replace('_', ' ', $this->getSkin()->getTitle()->getNsText());
-									$displaytitle = $this->data['title'];
-									if (!empty($namespace)) {
-										$pagetitle = $this->getSkin()->getTitle();
-										$newtitle = str_replace($namespace.':', '', $pagetitle);
-										$displaytitle = str_replace($pagetitle, $newtitle, $displaytitle);
-									?><!--<h4 class="namespace label"><?php print $namespace; ?></h4>--><?php
-									} ?>
-									<div id="content">
-	<h2 class="title">
-		<?php if (!empty($namespace)) {
-			?><span class="namespace"><?= $namespace ?>:</span><?php
-		} ?>
-		<?= $displaytitle ?>
-	</h2>
+
+<?= $this->getIndicators() ?>
+
+	<div id="content">
+
+<?= $this->render_title($this->getSkin()->getTitle()) ?>
+
 									<?php if ( $this->data['isarticle'] ) { ?><h3 id="tagline"><?php $this->msg( 'tagline' ) ?></h3><?php } ?>
 									<?php if ( $this->html('subtitle') ) { ?><h5 id="sitesub" class="subtitle"><?php $this->html('subtitle') ?></h5><?php } ?>
 									<div id="contentSub" class="clear_both"></div>
@@ -228,38 +201,19 @@ class pivotTemplate extends BaseTemplate {
 											<?php $this->html('dataAfterContent'); ?>
 										</div>
 									</div>	
-													
-									<footer class="row">
 
-										<div id="footer">
-											<div id="div-footer-left" class="small-12 medium-8 large-9 columns">
-											<ul id="footer-left">
-												<?php foreach ($this->getFooterLinks("flat") as $key) { ?>
-													<li id="footer-<?php echo $key ?>"><?php $this->html($key) ?></li>
-												<?php } ?>									
-											</ul>
-											</div>	
-											<div id="footer-right-icons" class="small-12 medium-4 large-3 columns hide-for-print">
-											<ul id="footer-right">
-												<?php foreach ($this->getFooterIcons($poweredbyType) as $blockName => $footerIcons) { ?>
-													<li class="<?php echo $blockName ?>"><?php foreach ($footerIcons as $icon) { ?>
-														<?php echo $this->getSkin()->makeFooterIcon($icon, $poweredbyMakeType); ?>
-														<?php } ?>
-													</li>
-												<?php } ?>
-											</ul>
-											</div>		
-										</div>			
-									</footer>
-								
+<?php $this->render_footer(); ?>
+
 								</div>
 						</div>
 					</div>
-						
+
 				</section>
-				
+
 			</div>
 		</div>
+
+
 		<div>
 			<a class="exit-off-canvas"></a>	
 		</div>
@@ -273,7 +227,45 @@ class pivotTemplate extends BaseTemplate {
 		wfRestoreWarnings();
 		
 	}
+
+	function render_footer() { ?>
+<footer class="row">
+<?php
+		foreach ($this->getFooterIcons("iconsonly") as $blockName => $footerIcons) {
+?>
+	<span class="<?php echo $blockName ?>"><?php
+			foreach ($footerIcons as $icon) {
+				print $this->getSkin()->makeFooterIcon($icon, "withImage");
+			}
+	 ?></span><?php
+		}
+		foreach ($this->getFooterLinks("flat") as $key) {
+?>
+	<span id="footer-<?= $key ?>"><?php $this->html($key) ?></span>
+<?php
+		}
+		?></footer><?php
+	}
+
+	function render_title($title) {
+		$ns = str_replace('_', ' ', $title->getNsText());
+		$displaytitle = str_replace(
+				$ns, "<span class=\"ns\">{$ns}</span>",
+				$this->data['title']);
+		?><h2 class="title"><?= $displaytitle ?></h2><?
+		// TODO: add edit link?
+	}
 	
+	function render_echo(&$user) {
+		if ($user->isLoggedIn()) { ?>
+<div id="echo-notifications" class="show-for-medium-up">
+	<div id="echo-notifications-alerts"></div>
+	<div id="echo-notifications-messages"></div>
+	<div id="echo-notifications-notice"></div>
+</div><?php
+		}
+	}
+
 	function renderSidebar() { 
 		$sidebar = $this->getSidebar();
 		foreach ($sidebar as $boxName => $box) { 
