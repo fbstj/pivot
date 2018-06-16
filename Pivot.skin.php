@@ -176,10 +176,11 @@ class pivotTemplate extends BaseTemplate {
 
 	<div id="content">
 
-<?= $this->render_title($this->getSkin()->getTitle()) ?>
+<?= $this->render_title($this->getSkin()->getTitle(), $wgUser) ?>
 
 									<?php if ( $this->data['isarticle'] ) { ?><h3 id="tagline"><?php $this->msg( 'tagline' ) ?></h3><?php } ?>
 									<?php if ( $this->html('subtitle') ) { ?><h5 id="sitesub" class="subtitle"><?php $this->html('subtitle') ?></h5><?php } ?>
+
 									<div id="contentSub" class="clear_both"></div>
 									<div id="bodyContent" class="mw-bodytext">
 									<?php 
@@ -241,13 +242,21 @@ class pivotTemplate extends BaseTemplate {
 		?></footer><?php
 	}
 
-	function render_title($title) {
+	function render_title($title, $user) {
+		// add a span around the namespace
 		$ns = str_replace('_', ' ', $title->getNsText());
 		$displaytitle = str_replace(
 				$ns, "<span class=\"ns\">{$ns}</span>",
 				$this->data['title']);
-		?><h2 class="title"><?= $displaytitle ?></h2><?
-		// TODO: add edit link?
+		// add an edit link to pages user can edit
+		$editlink = "";
+		if ($title->userCan('edit', $user)) {
+			$editlink = $title->getEditURL();
+			$editlink = "<a href=\"{$editlink}\" title=\"Edit page\">edit</a>";
+			$editlink = "<span class=\"mw-editsection\">[$editlink]</span>";
+		}
+		// print title
+		?><h2 class="title"><?= $displaytitle ?><?= $editlink ?></h2><?
 	}
 	
 	function render_echo(&$user) {
