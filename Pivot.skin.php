@@ -195,13 +195,7 @@ class pivotTemplate extends BaseTemplate {
 									<div class="clear_both"></div>
 									</div>
 									</div>
-									<div id="categories" class="row">
-										<div class="small-12 columns">
-											<div class="group"><?php $this->html('catlinks'); ?></div>
-											<?php $this->html('dataAfterContent'); ?>
-										</div>
-									</div>	
-
+<?php $this->html('catlinks'); ?>
 <?php $this->render_footer(); ?>
 
 								</div>
