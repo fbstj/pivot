@@ -197,7 +197,7 @@ div.small-10 .row {
   margin: 1em 0 0 0;
 }
 
-div.small-9.columns textarea {
+div.small-9.pivot-columns textarea {
   margin-bottom: 0.25em;
 }
 
@@ -231,16 +231,16 @@ ul#drop1.f-dropdown {
 ul.accordion {
 	margin: 0;
 }
-.columns ul.special li {
+.pivot-columns ul.special li {
   float:none;
   width: 100%;
 }
 
-.columns div#uploadtext ul {
+.pivot-columns div#uploadtext ul {
   list-style-type: disc;
 }
 
-.columns div#uploadtext ul li {
+.pivot-columns div#uploadtext ul li {
  float: none;
  width: 95%;
  margin-left: 2em;
@@ -260,9 +260,9 @@ ul.accordion {
 
 .catlinks li {border-left:none;}
 
-.mw-specialpages-table td ul.columns li {width: 50%;}
+.mw-specialpages-table td ul.pivot-columns li {width: 50%;}
 
-.columns #mw-normal-catlinks ul li {
+.pivot-columns #mw-normal-catlinks ul li {
   float: none;
   width: auto;
 }
@@ -273,18 +273,18 @@ ul.accordion {
 
 ul.vcard { padding: 0.5em 0.5em 0.55em 0.5em; }
 
-/*#mw-content-text .columns li {float:none;width:90%;}*/
+/*#mw-content-text .pivot-columns li {float:none;width:90%;}*/
 
 /* Footer Classes */
 
-footer.row ul.columns li { display: inline;float:none;}
+footer.row ul.pivot-columns li { display: inline;float:none;}
 
 footer.row ul {
   list-style-type: none;
   margin: .5em 0em;
 }
 
-footer.row ul.views.columns li {
+footer.row ul.views.pivot-columns li {
   margin-right: 1em;
 }
 

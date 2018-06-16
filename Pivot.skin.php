@@ -104,7 +104,7 @@ class pivotTemplate extends BaseTemplate {
 								<li class="has-form">
 									<form action="<?php $this->text( 'wgScript' ); ?>" id="searchform" class="mw-search">
 										<div class="row collapse">
-											<div class="small-12 columns">
+											<div class="small-12 pivot-columns">
 												<input type="search" name="search" placeholder="<?php echo wfMessage( 'search' )->text() ?>" title="Search [alt-shift-f]" accesskey="f" id="searchInput-offcanvas" autocomplete="off">
 											</div>
 										</div>
@@ -140,7 +140,7 @@ class pivotTemplate extends BaseTemplate {
 
 							<div class="row">
 								
-								<div id="sidebar" class="large-2 medium-3 columns hide-for-small hide-for-print">
+								<div id="sidebar" class="large-2 medium-3 pivot-columns hide-for-small hide-for-print">
 										<ul class="side-nav">
 											<li class="name logo">
 											<a href="<?php echo $this->data['nav_urls']['mainpage']['href']; ?>">
@@ -149,7 +149,7 @@ class pivotTemplate extends BaseTemplate {
 											<li class="has-form">
 												<form action="<?php $this->text( 'wgScript' ); ?>" id="searchform" class="mw-search">
 													<div class="row collapse">
-														<div class="small-12 columns">
+														<div class="small-12 pivot-columns">
 															<input type="search" name="search" placeholder="<?php echo wfMessage( 'search' )->text() ?>" title="Search [alt-shift-f]" accesskey="f" id="searchInput" autocomplete="off">
 														</div>
 													</div>
@@ -160,7 +160,7 @@ class pivotTemplate extends BaseTemplate {
 										</ul>
 								</div>
 								
-								<div id="p-cactions" class="large-10 medium-9 columns">
+								<div id="p-cactions" class="large-10 medium-9 pivot-columns">
 								
 									<?php if ($wgUser->isLoggedIn() || $wgPivotFeatures['showActionsForAnon']): ?>
 										<a id="drop" href="#" data-options="align:left" data-dropdown="drop1" class="button secondary small radius pull-right hide-for-print"><i class="fa fa-navicon fa-lg"><span id="page-actions" class="show-for-medium-up">&nbsp;<?php echo wfMessage( 'actions' )->text() ?></span></i></a>
