@@ -7,7 +7,6 @@
  * @ingroup Skins
  */
  
-
 class SkinPivot extends SkinTemplate {
 	public $skinname = 'pivot', $stylename = 'pivot', $template = 'pivotTemplate', $useHeadElement = true;
 
@@ -50,7 +49,7 @@ class SkinPivot extends SkinTemplate {
 }
 
 
-class pivotTemplate extends BaseTemplate {
+class PivotTemplate extends BaseTemplate {
 	public function execute() {
 		global $wgUser;
 		global $wgPivotFeatures;
@@ -256,7 +255,7 @@ class pivotTemplate extends BaseTemplate {
 			$editlink = "<span class=\"mw-editsection\">[$editlink]</span>";
 		}
 		// print title
-		?><h2 class="title"><?= $displaytitle ?><?= $editlink ?></h2><?
+		?><h2 class="title"><?= $displaytitle ?><?= $editlink ?></h2><?php
 	}
 	
 	function render_echo(&$user) {
@@ -272,11 +271,19 @@ class pivotTemplate extends BaseTemplate {
 	function renderSidebar() { 
 		$sidebar = $this->getSidebar();
 		foreach ($sidebar as $boxName => $box) { 
-			echo '<li><label class="sidebar" id="'.Sanitizer::escapeId( $box['id'] ).'"';echo Linker::tooltip( $box['id'] ).'>'.htmlspecialchars( $box['header'] ).'</label></li>';
-					if ( is_array( $box['content'] ) ) {
-							foreach ($box['content'] as $key => $item) { echo $this->makeListItem($key, $item); }
-								} 
-							}
-		return;	}	
+			$id = Sanitizer::escapeId($box['id']);
+			$tt = Linker::tooltip($box['id']);
+			// show title
+			?><li><label class="sidebar" id="<?= $id ?>" <?= $tt ?>><?php
+				echo htmlspecialchars( $box['header'] );
+			?></label></li><?php
+			// print items
+			if ( is_array( $box['content'] ) ) {
+				foreach ($box['content'] as $key => $item) {
+					echo $this->makeListItem($key, $item);
+				}
+			}
+		}
+	}
 }
-?>
+
