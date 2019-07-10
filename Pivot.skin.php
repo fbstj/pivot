@@ -11,7 +11,7 @@ class SkinPivot extends SkinTemplate {
 	public $skinname = 'pivot', $stylename = 'pivot', $template = 'pivotTemplate', $useHeadElement = true;
 
 	public function initPage(OutputPage $out) {
-        parent::initPage($out);
+		parent::initPage($out);
 		global $wgLocalStylePath;
 
 		$viewport_meta = 'width=device-width, user-scalable=yes, initial-scale=1.0';
@@ -40,10 +40,12 @@ class SkinPivot extends SkinTemplate {
 				$wgPivotFeatures[$fgOption] = $fgOptionValue;
 			}
 		}
-		$out->addModuleStyles('skins.pivot.styles');
 		if ( $wgPivotFeatures['preloadFontAwesome'] ) {
-			$out->addHeadItem('font', '<link rel="preload" href="'.$wgLocalStylePath.'/pivot/assets/fonts/fontawesome-webfont.woff2?v=4.7.0" as="font" type="font/woff2" crossorigin="anonymous" />');
+			$href = $wgLocalStylePath .'/pivot/assets/fonts/fontawesome-webfont.woff2?v4.7.0';
+			$tag = '<link rel="preload" href="'.$href.'" as="font" type="font/woff2" crossorigin="anonymous" />';
+			$out->addHeadItem('font', $tag);
 		}
+		$out->addModuleStyles('skins.pivot.styles');
 	}
 
 }
@@ -74,29 +76,37 @@ class PivotTemplate extends BaseTemplate {
 <!-- START PIVOTTEMPLATE -->
 		<div class="off-canvas-wrap docs-wrap" data-offcanvas="">
 			<div class="inner-wrap">
-				<?php if ($wgPivotFeatures['fixedNavBar'] != false) echo "<div class='fixed'>"; ?>
+<?php
+	if ($wgPivotFeatures['fixedNavBar'] != false) {
+		echo "<div class='fixed'>";
+	}
+?>
 				<nav class="tab-bar hide-for-print">
 					<section id="left-nav-aside" class="left-small show-for-small">
 						<a class="left-off-canvas-toggle"><span id="menu-user"><i class="fa fa-navicon fa-lg"></i></span></a>
 					</section>
 					
 					<section id="middle-nav" class="middle tab-bar-section">
-						<h1 class="title"><a href="<?php echo $this->data['nav_urls']['mainpage']['href']; ?>">
-					<span class="show-for-medium-up"><?php echo $wgPivotFeatures['wikiNameDesktop']; ?></span>
+						<h1 class="title"><a href="<?= $this->data['nav_urls']['mainpage']['href'] ?>">
+					<span class="show-for-medium-up"><?= $wgPivotFeatures['wikiNameDesktop'] ?></span>
 						<span class="show-for-small-only">
-						<?php if ($wgPivotFeatures['navbarIcon'] != false) { ?>
-							<img alt="<?php echo $this->text('sitename'); ?>" src="<?php echo $this->text('logopath'); ?>" style="max-width: 64px;height:auto; max-height:36px; display: inline-block; vertical-align:middle;">
-								<?php } ?>
-						<?php echo $wgPivotFeatures['wikiName']; ?></span></a></h1>
+<?php
+	if ($wgPivotFeatures['navbarIcon'] != false) {
+?>
+							<img alt="<?= $this->text('sitename'); ?>" src="<?= $this->text('logopath'); ?>" style="max-width: 64px;height:auto; max-height:36px; display: inline-block; vertical-align:middle;">
+<?php } ?>
+						<?= $wgPivotFeatures['wikiName']; ?></span></a></h1>
 					</section>
 
 <?php $this->render_echo($wgUser); ?>
 
 					<section id="right-nav-aside" class="right-small">
-					<a class="right-off-canvas-toggle"><span id="menu-user"><i class="fa <?php if ($wgUser->isLoggedIn()): ?>fa-user<?php else: ?>fa-navicon<?php endif; ?> fa-lg"></i></span></a>
+					<a class="right-off-canvas-toggle"><span id="menu-user"><i class="fa <?= $wgUser->isLoggedIn() ? 'fa-user' : 'fa-navicon'; ?>"></i></span></a>
 					</section>
 				</nav>
-				<?php if ($wgPivotFeatures['fixedNavBar'] != false) echo "</div>"; ?>
+<?php if ($wgPivotFeatures['fixedNavBar'] != false) {
+	echo "</div>";
+} ?>
 				    <aside class="left-off-canvas-menu">
       					<ul class="off-canvas-list">
 						
@@ -104,7 +114,7 @@ class PivotTemplate extends BaseTemplate {
 									<form action="<?php $this->text( 'wgScript' ); ?>" id="searchform" class="mw-search">
 										<div class="row collapse">
 											<div class="small-12 pivot-columns">
-												<input type="search" name="search" placeholder="<?php echo wfMessage( 'search' )->text() ?>" title="Search [alt-shift-f]" accesskey="f" id="searchInput-offcanvas" autocomplete="off">
+												<input type="search" name="search" placeholder="<?= wfMessage( 'search' )->text(); ?>" title="Search [alt-shift-f]" accesskey="f" id="searchInput-offcanvas" autocomplete="off">
 											</div>
 										</div>
 									</form>
@@ -116,22 +126,26 @@ class PivotTemplate extends BaseTemplate {
 					
 					<aside class="right-off-canvas-menu">
 					  <ul class="off-canvas-list">
-					<?php if ($wgUser->isLoggedIn()): ?>
-						<li id="personal-tools"><label>Personal</label></li>
-						<?php foreach ($this->getPersonalTools() as $key => $item) { echo $this->makeListItem($key, $item); } ?>
-							<?php else: ?>
-								<?php if (isset($this->data['personal_urls']['anonlogin'])): ?>
-									<li><a href="<?php echo $this->data['personal_urls']['anonlogin']['href']; ?>"><?php echo wfMessage( 'login' )->text() ?></a></li>
-								<?php elseif (isset($this->data['personal_urls']['login'])): ?>
-									<li><a href="<?php echo htmlspecialchars($this->data['personal_urls']['login']['href']); ?>"><?php echo wfMessage( 'login' )->text() ?></a></li>
-										<?php else: ?>
-											<li><?php echo Linker::link(Title::newFromText('Special:UserLogin'), wfMessage( 'login' )->text()); ?></li>
-								<?php endif; ?>
-							<?php endif; ?>
+<?php
+	if ($wgUser->isLoggedIn()) {
+		?><li id="personal-tools"><label>Personal</label></li><?php
+		foreach ($this->getPersonalTools() as $key => $item) {
+			echo $this->makeListItem($key, $item);
+		}
+	 } else
+	 if (isset($this->data['personal_urls']['anonlogin'])) {
+		?><li><a href="<?= $this->data['personal_urls']['anonlogin']['href']; ?>"><?= wfMessage( 'login' )->text() ?></a></li><?php
+	} else
+	if (isset($this->data['personal_urls']['login'])) {
+		?><li><a href="<?= htmlspecialchars($this->data['personal_urls']['login']['href']); ?>"><?= wfMessage( 'login' )->text() ?></a></li><?php
+	} else {
+		?><li><?= Linker::link(Title::newFromText('Special:UserLogin'), wfMessage( 'login' )->text()); ?></li><?php
+	}
+?>
 					  </ul>
 					</aside>
 
-					<section id="main-section" class="main-section" <?php if ($wgPivotFeatures['fixedNavBar'] != false) echo "style='margin-top:2.8125em'"; ?>>
+					<section id="main-section" class="main-section" <?php if ($wgPivotFeatures['fixedNavBar'] != false) { echo "style='margin-top:2.8125em'"; } ?>>
 					
 						<div id="page-content">
 							
@@ -142,14 +156,14 @@ class PivotTemplate extends BaseTemplate {
 								<div id="sidebar" class="large-2 medium-3 pivot-columns hide-for-small hide-for-print">
 										<ul class="side-nav">
 											<li class="name logo">
-											<a href="<?php echo $this->data['nav_urls']['mainpage']['href']; ?>">
-												<img alt="<?php echo $this->text('sitename'); ?>" src="<?php echo $this->text('logopath') ?>" style="max-width: 100%;height: auto;display: inline-block; vertical-align: middle;"></a>		
+											<a href="<?= $this->data['nav_urls']['mainpage']['href']; ?>">
+												<img alt="<?= $this->text('sitename'); ?>" src="<?= $this->text('logopath') ?>" style="max-width: 100%;height: auto;display: inline-block; vertical-align: middle;"></a>		
 											</li>
 											<li class="has-form">
 												<form action="<?php $this->text( 'wgScript' ); ?>" id="searchform" class="mw-search">
 													<div class="row collapse">
 														<div class="small-12 pivot-columns">
-															<input type="search" name="search" placeholder="<?php echo wfMessage( 'search' )->text() ?>" title="Search [alt-shift-f]" accesskey="f" id="searchInput" autocomplete="off">
+															<input type="search" name="search" placeholder="<?= wfMessage( 'search' )->text(); ?>" title="Search [alt-shift-f]" accesskey="f" id="searchInput" autocomplete="off">
 														</div>
 													</div>
 												</form>
@@ -162,10 +176,10 @@ class PivotTemplate extends BaseTemplate {
 								<div id="p-cactions" class="large-10 medium-9 pivot-columns">
 								
 									<?php if ($wgUser->isLoggedIn() || $wgPivotFeatures['showActionsForAnon']): ?>
-										<a id="drop" href="#" data-options="align:left" data-dropdown="drop1" class="button secondary small radius pull-right hide-for-print"><i class="fa fa-navicon fa-lg"><span id="page-actions" class="show-for-medium-up">&nbsp;<?php echo wfMessage( 'actions' )->text() ?></span></i></a>
+										<a id="drop" href="#" data-options="align:left" data-dropdown="drop1" class="button secondary small radius pull-right hide-for-print"><i class="fa fa-navicon fa-lg"><span id="page-actions" class="show-for-medium-up">&nbsp;<?= wfMessage( 'actions' )->text(); ?></span></i></a>
 										<ul id="drop1" class="tiny content f-dropdown" data-dropdown-content>
 											<?php foreach($this->data['content_actions'] as $key => $tab) { echo preg_replace(array('/\sprimary="1"/', '/\scontext="[a-z]+"/', '/\srel="archives"/'),'',$this->makeListItem($key, $tab)); } ?>
-											<?php wfRunHooks( 'SkinTemplateToolboxEnd', array( &$this, true ));  ?>
+											<?php Hooks::run( 'SkinTemplateToolboxEnd', array( &$this, true ));  ?>
 										</ul>
 
 									<?php endif; ?>
@@ -227,7 +241,7 @@ class PivotTemplate extends BaseTemplate {
 <?php
 		foreach ($this->getFooterIcons("iconsonly") as $blockName => $footerIcons) {
 ?>
-	<span class="<?php echo $blockName ?>"><?php
+	<span class="<?= $blockName; ?>"><?php
 			foreach ($footerIcons as $icon) {
 				print $this->getSkin()->makeFooterIcon($icon, "withImage");
 			}
